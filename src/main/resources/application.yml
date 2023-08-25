@@ -1,0 +1,13 @@
+
+server:
+  port: 4000
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: smallfish
+    url: jdbc:mysql://localhost:3306/schooldb
+    password: SmallFish@1!
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
