@@ -9,6 +9,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -25,7 +30,24 @@ public class SecurityConfig {
                 .authorizeHttpRequests((requests) ->
                         requests.requestMatchers(HttpMethod.POST , "/login" , "/register").permitAll()
                                 .anyRequest().authenticated()
+
                         );
+
+
         return  http.build();
     }
+
+    @Bean
+    public UserDetailsService userDetailsService (PasswordEncoder encoder){
+        UserDetails admin = User.withUsername("admin")
+                .password(encoder.encode("admin"))
+                .roles("ADMIN" ,"USER")
+                .build();
+        UserDetails user = User.withUsername("user")
+                .password(encoder.encode("user"))
+                .roles("USER")
+                .build();
+        return new InMemoryUserDetailsManager(user , admin);
+    }
 }
+
